@@ -1,0 +1,24 @@
+{
+    "ingestion": {
+        "raw_data_path": "artifacts\\raw\\laptop_raw.csv"
+    },
+    "transformation": {
+        "transformer": "artifacts\\transformed\\preprocessor.joblib",
+        "train_csv": "artifacts\\transformed\\train.csv",
+        "test_csv": "artifacts\\transformed\\test.csv"
+    },
+    "model": {
+        "model_path": "artifacts\\model\\best_model.joblib",
+        "train_score": 0.9655826615144386,
+        "test_score": 0.9650240530089602
+    },
+    "evaluation": {
+        "RMSE": 8243.503973813782,
+        "MAE": 5749.0160413521,
+        "R2": 0.9650240530089602
+    },
+    "pushed": {
+        "versioned_path": "prediction\\models\\models\\best_model_20260214_151551.joblib",
+        "active_path": "prediction\\models\\models\\current_model.joblib"
+    }
+}
