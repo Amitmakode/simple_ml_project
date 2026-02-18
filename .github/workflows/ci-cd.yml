@@ -1,0 +1,48 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Check Flask app
+      run: |
+        python -c "import app; print('Flask app OK')"
+    
+    - name: Build Docker image
+      run: |
+        docker build -t laptop-predictor:test .
+    
+    - name: Test Docker container
+      run: |
+        docker run -d -p 5000:5000 --name test-container laptop-predictor:test
+        sleep 5
+        docker stop test-container
+        docker rm test-container
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy to Render
+      run: |
+        curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
